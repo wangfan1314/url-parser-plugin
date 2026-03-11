@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>URL参数解析器</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <h1>URL参数解析器</h1>
+      <div class="header-actions">
+        <button id="refreshBtn" class="btn btn-secondary" title="刷新URL">🔄</button>
+        <button id="clearBtn" class="btn btn-secondary" title="清空">🗑️</button>
+      </div>
+    </header>
+
+    <div class="url-section">
+      <label for="urlInput">当前URL:</label>
+      <input type="text" id="urlInput" placeholder="输入或粘贴URL" />
+      <button id="parseBtn" class="btn btn-primary">解析</button>
+    </div>
+
+    <div class="search-section">
+      <input type="text" id="searchInput" placeholder="🔍 搜索参数..." />
+    </div>
+
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="params">参数</button>
+      <button class="tab-btn" data-tab="headers">Headers</button>
+    </div>
+
+    <!-- 参数标签页 -->
+    <div id="paramsTab" class="tab-content active">
+      <div class="params-list" id="paramsList">
+        <div class="empty-state">请先输入URL并点击解析</div>
+      </div>
+      <div class="actions">
+        <button id="addParamBtn" class="btn btn-primary">+ 添加参数</button>
+        <button id="applyParamsBtn" class="btn btn-success">应用参数</button>
+      </div>
+    </div>
+
+    <!-- Headers标签页 -->
+    <div id="headersTab" class="tab-content">
+      <div class="headers-list" id="headersList">
+        <div class="empty-state">暂无Headers</div>
+      </div>
+      <div class="actions">
+        <button id="addHeaderBtn" class="btn btn-primary">+ 添加Header</button>
+        <button id="exportHeadersBtn" class="btn btn-secondary">📥 导出文件</button>
+        <button id="importHeadersBtn" class="btn btn-secondary">📤 导入文件</button>
+        <button id="applyHeadersBtn" class="btn btn-success">应用Headers</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
+
