@@ -153,6 +153,9 @@ url-parser-plugin/
 - [ ] 支持历史记录
 - [ ] 支持暗色主题
 
+## 本地打包命令
+zip -r ../my-extension-v1.zip . -x "*.git*" -x "node_modules/*" -x "*.DS_Store"
+
 ## 许可证
 
 MIT License

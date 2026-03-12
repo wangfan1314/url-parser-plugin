@@ -1,7 +1,55 @@
-// Background service worker - 用于处理Header注入
+// Background service worker - 用于处理Header注入和Badge显示
 
 // 存储要注入的headers
 const headerMap = new Map();
+
+// ==================== Badge 自动显示 ====================
+
+// 更新扩展图标的Badge（显示URL参数数量）
+function updateBadge(tabId, url) {
+  try {
+    if (!url || url.startsWith('chrome://') || url.startsWith('chrome-extension://') || url.startsWith('about:')) {
+      chrome.action.setBadgeText({ text: '', tabId });
+      return;
+    }
+    const urlObj = new URL(url);
+    const paramCount = [...urlObj.searchParams].length;
+
+    if (paramCount > 0) {
+      // URL有参数时，显示参数数量
+      chrome.action.setBadgeText({ text: String(paramCount), tabId });
+      chrome.action.setBadgeBackgroundColor({ color: '#667eea', tabId });
+      chrome.action.setBadgeTextColor({ color: '#ffffff', tabId });
+    } else {
+      chrome.action.setBadgeText({ text: '', tabId });
+    }
+  } catch (e) {
+    // 忽略无效URL
+    chrome.action.setBadgeText({ text: '', tabId });
+  }
+}
+
+// 监听标签页URL变化，更新Badge
+chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+  if (changeInfo.url) {
+    updateBadge(tabId, changeInfo.url);
+  }
+  if (changeInfo.status === 'complete' && tab.url) {
+    updateBadge(tabId, tab.url);
+  }
+});
+
+// 切换标签页时更新Badge
+chrome.tabs.onActivated.addListener(async (activeInfo) => {
+  try {
+    const tab = await chrome.tabs.get(activeInfo.tabId);
+    if (tab && tab.url) {
+      updateBadge(activeInfo.tabId, tab.url);
+    }
+  } catch (e) {
+    // 忽略错误
+  }
+});
 
 // 插件启动时，恢复所有保存的headers规则
 chrome.runtime.onStartup.addListener(() => {
