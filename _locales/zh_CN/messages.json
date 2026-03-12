@@ -1,0 +1,329 @@
+{
+  "extName": {
+    "message": "URL参数解析器",
+    "description": "扩展名称"
+  },
+  "extDescription": {
+    "message": "快速解析URL参数，支持编辑、搜索、拖拽排序和Header注入",
+    "description": "扩展描述"
+  },
+  "appTitle": {
+    "message": "URL参数解析器",
+    "description": "弹出窗口标题"
+  },
+  "refreshUrl": {
+    "message": "刷新URL",
+    "description": "刷新按钮提示"
+  },
+  "clearAll": {
+    "message": "清空",
+    "description": "清空按钮提示"
+  },
+  "currentUrl": {
+    "message": "当前URL:",
+    "description": "URL输入框标签"
+  },
+  "urlPlaceholder": {
+    "message": "输入或粘贴URL",
+    "description": "URL输入框占位符"
+  },
+  "parseBtn": {
+    "message": "解析",
+    "description": "解析按钮"
+  },
+  "searchPlaceholder": {
+    "message": "🔍 搜索参数...",
+    "description": "搜索框占位符"
+  },
+  "tabParams": {
+    "message": "参数",
+    "description": "参数标签页"
+  },
+  "tabHeaders": {
+    "message": "Headers",
+    "description": "Headers标签页"
+  },
+  "emptyParams": {
+    "message": "请先输入URL并点击解析",
+    "description": "参数列表为空提示"
+  },
+  "addParam": {
+    "message": "+ 添加参数",
+    "description": "添加参数按钮"
+  },
+  "applyParams": {
+    "message": "应用参数",
+    "description": "应用参数按钮"
+  },
+  "emptyHeaders": {
+    "message": "暂无Headers",
+    "description": "Headers列表为空提示"
+  },
+  "addHeader": {
+    "message": "+ 添加Header",
+    "description": "添加Header按钮"
+  },
+  "exportFile": {
+    "message": "📥 导出文件",
+    "description": "导出按钮"
+  },
+  "importFile": {
+    "message": "📤 导入文件",
+    "description": "导入按钮"
+  },
+  "applyHeaders": {
+    "message": "应用Headers",
+    "description": "应用Headers按钮"
+  },
+  "paramNamePlaceholder": {
+    "message": "参数名",
+    "description": "参数名输入框占位符"
+  },
+  "paramValuePlaceholder": {
+    "message": "参数值",
+    "description": "参数值输入框占位符"
+  },
+  "headerNamePlaceholder": {
+    "message": "Header名称",
+    "description": "Header名称输入框占位符"
+  },
+  "headerValuePlaceholder": {
+    "message": "Header值",
+    "description": "Header值输入框占位符"
+  },
+  "deleteBtn": {
+    "message": "删除",
+    "description": "删除按钮"
+  },
+  "unpinParam": {
+    "message": "取消固定",
+    "description": "取消固定提示"
+  },
+  "pinToTop": {
+    "message": "固定到顶部",
+    "description": "固定到顶部提示"
+  },
+  "noMatchingParams": {
+    "message": "未找到匹配的参数",
+    "description": "搜索无结果提示"
+  },
+  "urlFormatError": {
+    "message": "URL格式错误，请检查URL是否正确",
+    "description": "URL格式错误提示"
+  },
+  "addValidHeader": {
+    "message": "请至少添加一个有效的Header",
+    "description": "无有效Header提示"
+  },
+  "cannotGetTab": {
+    "message": "无法获取当前标签页",
+    "description": "获取标签页失败提示"
+  },
+  "headersApplied": {
+    "message": "Headers已应用，请刷新页面查看效果",
+    "description": "Headers应用成功提示"
+  },
+  "applyHeadersFailed": {
+    "message": "应用Headers失败: ",
+    "description": "Headers应用失败前缀"
+  },
+  "unknownError": {
+    "message": "未知错误",
+    "description": "未知错误文本"
+  },
+  "applyParamsFailed": {
+    "message": "应用参数失败: ",
+    "description": "参数应用失败前缀"
+  },
+  "noExportHeaders": {
+    "message": "没有可导出的Headers",
+    "description": "无可导出Headers提示"
+  },
+  "exportAsTemplatePrompt": {
+    "message": "是否导出为模板格式？\n点击\"确定\"导出为模板，点击\"取消\"仅导出Headers",
+    "description": "导出格式确认"
+  },
+  "enterTemplateName": {
+    "message": "请输入模板名称:",
+    "description": "模板名称输入提示"
+  },
+  "defaultTemplateName": {
+    "message": "Header模板_",
+    "description": "默认模板名称前缀"
+  },
+  "templateExportedAndSaved": {
+    "message": "模板\"$NAME$\"已导出并保存！",
+    "description": "模板导出保存成功提示",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "我的模板"
+      }
+    }
+  },
+  "headersExportedTo": {
+    "message": "Headers已导出到下载文件夹: $FILENAME$",
+    "description": "Headers导出成功提示",
+    "placeholders": {
+      "filename": {
+        "content": "$1",
+        "example": "headers_2024-01-01.json"
+      }
+    }
+  },
+  "exportFailed": {
+    "message": "导出失败: ",
+    "description": "导出失败前缀"
+  },
+  "headersExportedFallback": {
+    "message": "Headers已导出（备用方案）",
+    "description": "备用导出成功提示"
+  },
+  "exportFailedCheckPermissions": {
+    "message": "导出失败，请检查权限设置",
+    "description": "导出权限错误提示"
+  },
+  "templateAlreadyExists": {
+    "message": "该模板已存在",
+    "description": "模板已存在提示"
+  },
+  "templateImported": {
+    "message": "成功导入模板\"$NAME$\"！",
+    "description": "模板导入成功提示",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "我的模板"
+      }
+    }
+  },
+  "fileFormatError": {
+    "message": "文件格式错误：缺少headers字段",
+    "description": "文件格式错误提示"
+  },
+  "noHeadersInFile": {
+    "message": "文件中没有Headers数据",
+    "description": "文件无数据提示"
+  },
+  "confirmImport": {
+    "message": "确定要导入 $COUNT$ 个Headers吗？当前Headers将被替换。",
+    "description": "导入确认",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "importSuccess": {
+    "message": "成功导入 $COUNT$ 个Headers！",
+    "description": "导入成功提示",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "importFailed": {
+    "message": "导入失败: ",
+    "description": "导入失败前缀"
+  },
+  "importFailedTip": {
+    "message": "\n请确保文件是有效的JSON格式",
+    "description": "导入失败提示"
+  },
+  "syncSelectPrompt": {
+    "message": "请选择下载文件夹中的模板文件进行同步。\n模板文件通常位于：下载文件夹/url-parser-plugin/templates/",
+    "description": "同步模板提示"
+  },
+  "syncComplete": {
+    "message": "同步完成！\n新增: $NEW$ 个模板\n更新: $UPDATED$ 个模板",
+    "description": "同步结果",
+    "placeholders": {
+      "new": {
+        "content": "$1",
+        "example": "2"
+      },
+      "updated": {
+        "content": "$2",
+        "example": "1"
+      }
+    }
+  },
+  "noValidTemplates": {
+    "message": "没有找到有效的模板文件",
+    "description": "无有效模板提示"
+  },
+  "templateNoExist": {
+    "message": "模板不存在或已损坏",
+    "description": "模板不存在提示"
+  },
+  "confirmLoadTemplate": {
+    "message": "确定要加载模板\"$NAME$\"吗？当前Headers将被替换。",
+    "description": "加载模板确认",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "我的模板"
+      }
+    }
+  },
+  "templateLoaded": {
+    "message": "模板\"$NAME$\"已加载！",
+    "description": "模板加载成功提示",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "我的模板"
+      }
+    }
+  },
+  "confirmDeleteTemplate": {
+    "message": "确定要删除模板\"$NAME$\"吗？",
+    "description": "删除模板确认",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "我的模板"
+      }
+    }
+  },
+  "addValidHeaderFirst": {
+    "message": "请先添加至少一个有效的Header",
+    "description": "保存模板时无有效Header提示"
+  },
+  "templateSaved": {
+    "message": "模板\"$NAME$\"已保存！",
+    "description": "模板保存成功提示",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "我的模板"
+      }
+    }
+  },
+  "headerCount": {
+    "message": "$COUNT$个Header",
+    "description": "模板中Header数量",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
+  },
+  "loadBtn": {
+    "message": "加载",
+    "description": "加载模板按钮"
+  },
+  "noSavedTemplates": {
+    "message": "暂无保存的模板",
+    "description": "模板列表为空提示"
+  },
+  "syncFailed": {
+    "message": "同步模板失败: ",
+    "description": "同步失败前缀"
+  }
+}
+

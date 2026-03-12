@@ -1,11 +1,48 @@
-// 全局状态
+// ==================== 国际化辅助函数 ====================
+
+// 获取国际化消息的快捷函数
+function i18n(key, ...substitutions) {
+  return chrome.i18n.getMessage(key, substitutions) || key;
+}
+
+// 初始化页面上的所有国际化文本
+function initI18n() {
+  // 替换 data-i18n 属性（textContent）
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    const msg = chrome.i18n.getMessage(key);
+    if (msg) el.textContent = msg;
+  });
+
+  // 替换 data-i18n-placeholder 属性
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+    const key = el.getAttribute('data-i18n-placeholder');
+    const msg = chrome.i18n.getMessage(key);
+    if (msg) el.placeholder = msg;
+  });
+
+  // 替换 data-i18n-title 属性
+  document.querySelectorAll('[data-i18n-title]').forEach(el => {
+    const key = el.getAttribute('data-i18n-title');
+    const msg = chrome.i18n.getMessage(key);
+    if (msg) el.title = msg;
+  });
+
+  // 设置html的lang属性
+  const uiLang = chrome.i18n.getUILanguage();
+  document.documentElement.lang = uiLang.startsWith('zh') ? 'zh-CN' : 'en';
+}
+
+// ==================== 全局状态 ====================
+
 let params = [];
 let headers = [];
 let pinnedParams = new Set();
 let searchQuery = '';
 let headerTemplates = []; // 保存的Header模板列表
 
-// DOM元素
+// ==================== DOM元素 ====================
+
 const urlInput = document.getElementById('urlInput');
 const parseBtn = document.getElementById('parseBtn');
 const refreshBtn = document.getElementById('refreshBtn');
@@ -22,27 +59,33 @@ const importHeadersBtn = document.getElementById('importHeadersBtn');
 const tabBtns = document.querySelectorAll('.tab-btn');
 const tabContents = document.querySelectorAll('.tab-content');
 
-// 初始化
+// ==================== 初始化 ====================
+
 document.addEventListener('DOMContentLoaded', async () => {
+  // 初始化国际化
+  initI18n();
+
   // 获取当前标签页URL
   await loadCurrentUrl();
-  
+
   // 从存储加载数据
   await loadFromStorage();
-  
+
   // 加载当前domain的headers（如果已应用过）
   await loadCurrentDomainHeaders();
-  
+
   // 从文件系统自动加载模板
   await autoLoadTemplatesFromFiles();
-  
+
   // 绑定事件
   bindEvents();
-  
+
   // 渲染参数和headers
   renderParams();
   renderHeaders();
 });
+
+// ==================== 数据加载 ====================
 
 // 加载当前domain的headers
 async function loadCurrentDomainHeaders() {
@@ -52,12 +95,12 @@ async function loadCurrentDomainHeaders() {
       const url = new URL(tab.url);
       const domain = url.hostname;
       const domainStorageKey = `domainHeaders_${domain}`;
-      
+
       const result = await chrome.storage.local.get([domainStorageKey]);
       if (result[domainStorageKey] && Array.isArray(result[domainStorageKey])) {
         // 如果当前headers为空，或者domain的headers与当前不同，则加载domain的headers
-        if (headers.length === 0 || 
-            JSON.stringify(headers.map(h => ({key: h.key, value: h.value}))) !== 
+        if (headers.length === 0 ||
+            JSON.stringify(headers.map(h => ({key: h.key, value: h.value}))) !==
             JSON.stringify(result[domainStorageKey])) {
           headers = result[domainStorageKey].map(h => ({
             id: Date.now() + Math.random(),
@@ -68,27 +111,18 @@ async function loadCurrentDomainHeaders() {
       }
     }
   } catch (error) {
-    console.error('加载当前domain headers失败:', error);
+    console.error('Failed to load domain headers:', error);
   }
 }
 
 // 从文件系统自动加载模板
 async function autoLoadTemplatesFromFiles() {
   try {
-    // Chrome插件无法直接读取下载文件夹中的文件内容
-    // 但我们可以通过chrome.storage.local持久化模板数据
-    // 模板数据已经在loadFromStorage()中加载了
-    
-    // 这里可以添加额外的同步逻辑，比如检查文件是否存在
-    // 由于API限制，实际的文件读取需要通过用户手动导入
-    // 但storage中的数据已经足够持久化了
-    
-    // 确保模板数据已正确加载
     if (headerTemplates && headerTemplates.length > 0) {
-      console.log(`已加载 ${headerTemplates.length} 个模板`);
+      console.log(`Loaded ${headerTemplates.length} templates`);
     }
   } catch (error) {
-    console.warn('自动加载模板文件失败:', error);
+    console.warn('Auto-load templates failed:', error);
   }
 }
 
@@ -101,7 +135,7 @@ async function loadCurrentUrl() {
       parseUrl(tab.url);
     }
   } catch (error) {
-    console.error('获取当前URL失败:', error);
+    console.error('Failed to get current URL:', error);
   }
 }
 
@@ -114,7 +148,7 @@ async function loadFromStorage() {
     if (result.pinnedParams) pinnedParams = new Set(result.pinnedParams);
     if (result.headerTemplates) headerTemplates = result.headerTemplates;
   } catch (error) {
-    console.error('加载存储数据失败:', error);
+    console.error('Failed to load storage:', error);
   }
 }
 
@@ -126,20 +160,19 @@ async function loadCurrentDomainHeaders() {
       const url = new URL(tab.url);
       const domain = url.hostname;
       const domainStorageKey = `domainHeaders_${domain}`;
-      
+
       const result = await chrome.storage.local.get([domainStorageKey]);
       if (result[domainStorageKey] && Array.isArray(result[domainStorageKey]) && result[domainStorageKey].length > 0) {
-        // 加载domain的headers到当前headers数组
         headers = result[domainStorageKey].map(h => ({
           id: Date.now() + Math.random(),
           key: h.key,
           value: h.value
         }));
-        console.log(`已加载domain ${domain} 的headers:`, headers);
+        console.log(`Loaded headers for domain ${domain}:`, headers);
       }
     }
   } catch (error) {
-    console.error('加载当前domain headers失败:', error);
+    console.error('Failed to load domain headers:', error);
   }
 }
 
@@ -153,11 +186,12 @@ async function saveToStorage() {
       headerTemplates
     });
   } catch (error) {
-    console.error('保存数据失败:', error);
+    console.error('Failed to save storage:', error);
   }
 }
 
-// 绑定事件
+// ==================== 事件绑定 ====================
+
 function bindEvents() {
   parseBtn.addEventListener('click', () => {
     const url = urlInput.value.trim();
@@ -225,18 +259,17 @@ function bindEvents() {
   });
 }
 
-// 解析URL
+// ==================== URL解析 ====================
+
 function parseUrl(url) {
   try {
     const urlObj = new URL(url);
     const newParams = [];
-    
-    // 解析查询参数
+
     urlObj.searchParams.forEach((value, key) => {
       newParams.push({ key, value, id: Date.now() + Math.random() });
     });
 
-    // 合并现有参数（保留已固定的参数）
     const existingKeys = new Set(params.map(p => p.key));
     newParams.forEach(newParam => {
       if (!existingKeys.has(newParam.key)) {
@@ -244,14 +277,12 @@ function parseUrl(url) {
       }
     });
 
-    // 排序：固定的参数在前
     sortParams();
-    
     renderParams();
     saveToStorage();
   } catch (error) {
-    alert('URL格式错误，请检查URL是否正确');
-    console.error('解析URL失败:', error);
+    alert(i18n('urlFormatError'));
+    console.error('Failed to parse URL:', error);
   }
 }
 
@@ -266,36 +297,34 @@ function sortParams() {
   });
 }
 
-// 渲染参数列表
+// ==================== 参数渲染 ====================
+
 function renderParams() {
   paramsList.innerHTML = '';
 
   if (params.length === 0) {
-    paramsList.innerHTML = '<div class="empty-state">请先输入URL并点击解析</div>';
+    paramsList.innerHTML = `<div class="empty-state">${i18n('emptyParams')}</div>`;
     return;
   }
 
-  // 过滤参数
   let filteredParams = params;
   if (searchQuery) {
-    filteredParams = params.filter(p => 
-      p.key.toLowerCase().includes(searchQuery) || 
+    filteredParams = params.filter(p =>
+      p.key.toLowerCase().includes(searchQuery) ||
       p.value.toLowerCase().includes(searchQuery)
     );
   }
 
   if (filteredParams.length === 0) {
-    paramsList.innerHTML = '<div class="empty-state">未找到匹配的参数</div>';
+    paramsList.innerHTML = `<div class="empty-state">${i18n('noMatchingParams')}</div>`;
     return;
   }
 
-  // 创建参数项
   filteredParams.forEach((param, index) => {
     const item = createParamItem(param, index);
     paramsList.appendChild(item);
   });
 
-  // 初始化拖拽
   initDragAndDrop();
 }
 
@@ -311,21 +340,20 @@ function createParamItem(param, index) {
 
   item.innerHTML = `
     <div class="drag-handle">☰</div>
-    <button class="btn-pin ${isPinned ? 'pinned' : ''}" title="${isPinned ? '取消固定' : '固定到顶部'}">
+    <button class="btn-pin ${isPinned ? 'pinned' : ''}" title="${isPinned ? i18n('unpinParam') : i18n('pinToTop')}">
       ${isPinned ? '📌' : '📍'}
     </button>
     <div class="param-key">
-      <input type="text" value="${escapeHtml(param.key)}" placeholder="参数名" />
+      <input type="text" value="${escapeHtml(param.key)}" placeholder="${i18n('paramNamePlaceholder')}" />
     </div>
     <div class="param-value">
-      <input type="text" value="${escapeHtml(param.value)}" placeholder="参数值" />
+      <input type="text" value="${escapeHtml(param.value)}" placeholder="${i18n('paramValuePlaceholder')}" />
     </div>
     <div class="param-actions">
-      <button class="btn btn-danger delete-btn">删除</button>
+      <button class="btn btn-danger delete-btn">${i18n('deleteBtn')}</button>
     </div>
   `;
 
-  // 绑定事件
   const keyInput = item.querySelector('.param-key input');
   const valueInput = item.querySelector('.param-value input');
   const deleteBtn = item.querySelector('.delete-btn');
@@ -374,7 +402,8 @@ function addParam(key, value) {
   saveToStorage();
 }
 
-// 初始化拖拽功能
+// ==================== 拖拽功能 ====================
+
 let draggedItem = null;
 let draggedItemId = null;
 
@@ -392,7 +421,6 @@ function initDragAndDrop() {
 
     item.addEventListener('dragend', () => {
       item.classList.remove('dragging');
-      // 清理所有拖拽相关的样式
       items.forEach(i => i.classList.remove('drag-over'));
       draggedItem = null;
       draggedItemId = null;
@@ -401,8 +429,6 @@ function initDragAndDrop() {
     item.addEventListener('dragover', (e) => {
       e.preventDefault();
       e.dataTransfer.dropEffect = 'move';
-      
-      // 添加视觉反馈
       if (item !== draggedItem) {
         item.classList.add('drag-over');
       }
@@ -415,19 +441,15 @@ function initDragAndDrop() {
     item.addEventListener('drop', (e) => {
       e.preventDefault();
       item.classList.remove('drag-over');
-      
+
       if (draggedItem && draggedItemId && item !== draggedItem) {
         const targetId = item.dataset.id;
-        
         const draggedIndex = params.findIndex(p => p.id == draggedItemId);
         const targetIndex = params.findIndex(p => p.id == targetId);
-        
+
         if (draggedIndex !== -1 && targetIndex !== -1) {
-          // 移动参数
           const [moved] = params.splice(draggedIndex, 1);
           params.splice(targetIndex, 0, moved);
-          
-          // 重新排序（保持固定参数在前）
           sortParams();
           renderParams();
           saveToStorage();
@@ -436,7 +458,6 @@ function initDragAndDrop() {
     });
   });
 
-  // 在列表容器上处理drop事件（用于拖到列表末尾）
   paramsList.addEventListener('dragover', (e) => {
     e.preventDefault();
     e.dataTransfer.dropEffect = 'move';
@@ -444,26 +465,25 @@ function initDragAndDrop() {
 
   paramsList.addEventListener('drop', (e) => {
     e.preventDefault();
-    
+
     if (draggedItemId) {
       const afterElement = getDragAfterElement(paramsList, e.clientY);
       const draggedIndex = params.findIndex(p => p.id == draggedItemId);
-      
+
       if (draggedIndex !== -1) {
         if (afterElement == null) {
-          // 拖到末尾
           const [moved] = params.splice(draggedIndex, 1);
           params.push(moved);
         } else {
           const targetId = afterElement.dataset.id;
           const targetIndex = params.findIndex(p => p.id == targetId);
-          
+
           if (targetIndex !== -1) {
             const [moved] = params.splice(draggedIndex, 1);
             params.splice(targetIndex, 0, moved);
           }
         }
-        
+
         sortParams();
         renderParams();
         saveToStorage();
@@ -472,14 +492,13 @@ function initDragAndDrop() {
   });
 }
 
-// 获取拖拽后的元素位置
 function getDragAfterElement(container, y) {
   const draggableElements = [...container.querySelectorAll('.param-item:not(.dragging)')];
-  
+
   return draggableElements.reduce((closest, child) => {
     const box = child.getBoundingClientRect();
     const offset = y - box.top - box.height / 2;
-    
+
     if (offset < 0 && offset > closest.offset) {
       return { offset: offset, element: child };
     } else {
@@ -488,12 +507,13 @@ function getDragAfterElement(container, y) {
   }, { offset: Number.NEGATIVE_INFINITY }).element;
 }
 
-// 渲染Headers列表
+// ==================== Headers渲染 ====================
+
 function renderHeaders() {
   headersList.innerHTML = '';
 
   if (headers.length === 0) {
-    headersList.innerHTML = '<div class="empty-state">暂无Headers</div>';
+    headersList.innerHTML = `<div class="empty-state">${i18n('emptyHeaders')}</div>`;
     return;
   }
 
@@ -503,7 +523,6 @@ function renderHeaders() {
   });
 }
 
-// 创建Header项
 function createHeaderItem(header, index) {
   const item = document.createElement('div');
   item.className = 'header-item';
@@ -511,17 +530,16 @@ function createHeaderItem(header, index) {
 
   item.innerHTML = `
     <div class="header-key">
-      <input type="text" value="${escapeHtml(header.key)}" placeholder="Header名称" />
+      <input type="text" value="${escapeHtml(header.key)}" placeholder="${i18n('headerNamePlaceholder')}" />
     </div>
     <div class="header-value">
-      <input type="text" value="${escapeHtml(header.value)}" placeholder="Header值" />
+      <input type="text" value="${escapeHtml(header.value)}" placeholder="${i18n('headerValuePlaceholder')}" />
     </div>
     <div class="header-actions-item">
-      <button class="btn btn-danger delete-btn">删除</button>
+      <button class="btn btn-danger delete-btn">${i18n('deleteBtn')}</button>
     </div>
   `;
 
-  // 绑定事件
   const keyInput = item.querySelector('.header-key input');
   const valueInput = item.querySelector('.header-value input');
   const deleteBtn = item.querySelector('.delete-btn');
@@ -557,85 +575,79 @@ function addHeader(key, value) {
   saveToStorage();
 }
 
-// 应用参数
+// ==================== 应用参数和Headers ====================
+
 async function applyParams() {
   try {
     const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
     if (!tab || !tab.url) {
-      alert('无法获取当前标签页');
+      alert(i18n('cannotGetTab'));
       return;
     }
 
     const urlObj = new URL(tab.url);
-    
-    // 清空现有参数
     urlObj.search = '';
-    
-    // 添加新参数
+
     params.forEach(param => {
       if (param.key && param.value) {
         urlObj.searchParams.append(param.key, param.value);
       }
     });
 
-    // 导航到新URL
     await chrome.tabs.update(tab.id, { url: urlObj.toString() });
-    
-    // 更新输入框
     urlInput.value = urlObj.toString();
   } catch (error) {
-    alert('应用参数失败: ' + error.message);
-    console.error('应用参数失败:', error);
+    alert(i18n('applyParamsFailed') + error.message);
+    console.error('Failed to apply params:', error);
   }
 }
 
-// 应用Headers
 async function applyHeaders() {
   try {
-    // 发送消息到background script来注入headers
     const validHeaders = headers.filter(h => h.key && h.value);
-    
+
     if (validHeaders.length === 0) {
-      alert('请至少添加一个有效的Header');
+      alert(i18n('addValidHeader'));
       return;
     }
 
     const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
     if (!tab || !tab.id) {
-      alert('无法获取当前标签页');
+      alert(i18n('cannotGetTab'));
       return;
     }
 
-    // 发送消息到background script
     chrome.runtime.sendMessage({
       action: 'injectHeaders',
       headers: validHeaders,
       tabId: tab.id
     }, (response) => {
       if (response && response.success) {
-        alert('Headers已应用，请刷新页面查看效果');
+        alert(i18n('headersApplied'));
       } else {
-        alert('应用Headers失败: ' + (response?.error || '未知错误'));
+        alert(i18n('applyHeadersFailed') + (response?.error || i18n('unknownError')));
       }
     });
   } catch (error) {
-    alert('应用Headers失败: ' + error.message);
-    console.error('应用Headers失败:', error);
+    alert(i18n('applyHeadersFailed') + error.message);
+    console.error('Failed to apply headers:', error);
   }
 }
 
-// 切换标签页
+// ==================== 标签页切换 ====================
+
 function switchTab(tab) {
   tabBtns.forEach(btn => {
     btn.classList.toggle('active', btn.dataset.tab === tab);
   });
-  
+
   tabContents.forEach(content => {
     content.classList.toggle('active', content.id === `${tab}Tab`);
   });
 }
 
-// HTML转义
+// ==================== 工具函数 ====================
+
 function escapeHtml(text) {
   const div = document.createElement('div');
   div.textContent = text;
@@ -644,12 +656,12 @@ function escapeHtml(text) {
 
 // ==================== Header模板管理功能 ====================
 
-// 渲染模板列表
 function renderTemplates() {
+  if (typeof templatesList === 'undefined' || !templatesList) return;
   templatesList.innerHTML = '';
 
   if (headerTemplates.length === 0) {
-    templatesList.innerHTML = '<div class="empty-state">暂无保存的模板</div>';
+    templatesList.innerHTML = `<div class="empty-state">${i18n('noSavedTemplates')}</div>`;
     return;
   }
 
@@ -659,14 +671,13 @@ function renderTemplates() {
   });
 }
 
-// 创建模板项
 function createTemplateItem(template, index) {
   const item = document.createElement('div');
   item.className = 'template-item';
   item.dataset.id = template.id;
 
   const headerCount = template.headers ? template.headers.length : 0;
-  const date = new Date(template.saveTime).toLocaleString('zh-CN', {
+  const date = new Date(template.saveTime).toLocaleString(undefined, {
     year: 'numeric',
     month: '2-digit',
     day: '2-digit',
@@ -676,14 +687,13 @@ function createTemplateItem(template, index) {
 
   item.innerHTML = `
     <div class="template-name">${escapeHtml(template.name)}</div>
-    <div class="template-meta">${headerCount}个Header · ${date}</div>
+    <div class="template-meta">${i18n('headerCount', String(headerCount))} · ${date}</div>
     <div class="template-actions">
-      <button class="btn btn-primary load-template-btn" title="加载">加载</button>
-      <button class="btn btn-danger delete-template-btn" title="删除">删除</button>
+      <button class="btn btn-primary load-template-btn" title="${i18n('loadBtn')}">${i18n('loadBtn')}</button>
+      <button class="btn btn-danger delete-template-btn" title="${i18n('deleteBtn')}">${i18n('deleteBtn')}</button>
     </div>
   `;
 
-  // 绑定事件
   const loadBtn = item.querySelector('.load-template-btn');
   const deleteBtn = item.querySelector('.delete-template-btn');
 
@@ -694,7 +704,7 @@ function createTemplateItem(template, index) {
 
   deleteBtn.addEventListener('click', (e) => {
     e.stopPropagation();
-    if (confirm(`确定要删除模板"${template.name}"吗？`)) {
+    if (confirm(i18n('confirmDeleteTemplate', template.name))) {
       deleteTemplate(template.id);
     }
   });
@@ -702,23 +712,22 @@ function createTemplateItem(template, index) {
   return item;
 }
 
-// 显示保存模板对话框
 function showSaveTemplateModal() {
   const validHeaders = headers.filter(h => h.key && h.value);
-  
+
   if (validHeaders.length === 0) {
-    alert('请先添加至少一个有效的Header');
+    alert(i18n('addValidHeaderFirst'));
     return;
   }
 
-  const name = prompt('请输入模板名称:', `Header模板_${new Date().toLocaleDateString()}`);
-  
+  const defaultName = i18n('defaultTemplateName') + new Date().toLocaleDateString();
+  const name = prompt(i18n('enterTemplateName'), defaultName);
+
   if (name && name.trim()) {
     saveHeaderTemplate(name.trim(), validHeaders);
   }
 }
 
-// 保存Header模板到浏览器存储和文件系统
 async function saveHeaderTemplate(name, headersToSave) {
   const template = {
     id: Date.now() + Math.random(),
@@ -729,14 +738,11 @@ async function saveHeaderTemplate(name, headersToSave) {
 
   headerTemplates.push(template);
   await saveToStorage();
-  
-  // 自动保存到文件系统
   await autoSaveTemplateToFile(template);
-  
-  alert(`模板"${name}"已保存！`);
+
+  alert(i18n('templateSaved', name));
 }
 
-// 自动保存模板到文件系统
 async function autoSaveTemplateToFile(template) {
   try {
     const exportData = {
@@ -750,7 +756,6 @@ async function autoSaveTemplateToFile(template) {
     const blob = new Blob([jsonStr], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
 
-    // 保存到固定位置：下载文件夹下的插件专用文件夹
     const filename = `url-parser-plugin/templates/${template.name.replace(/[^a-zA-Z0-9\u4e00-\u9fa5]/g, '_')}_${template.id}.json`;
 
     await chrome.downloads.download({
@@ -761,25 +766,21 @@ async function autoSaveTemplateToFile(template) {
 
     setTimeout(() => URL.revokeObjectURL(url), 1000);
   } catch (error) {
-    console.warn('自动保存模板到文件失败:', error);
-    // 不显示错误，因为浏览器存储已经保存成功
+    console.warn('Auto-save template to file failed:', error);
   }
 }
 
-// 加载模板
 function loadTemplate(templateId) {
   const template = headerTemplates.find(t => t.id == templateId);
-  
+
   if (!template || !template.headers) {
-    alert('模板不存在或已损坏');
+    alert(i18n('templateNoExist'));
     return;
   }
 
-  if (confirm(`确定要加载模板"${template.name}"吗？当前Headers将被替换。`)) {
-    // 清空现有headers
+  if (confirm(i18n('confirmLoadTemplate', template.name))) {
     headers = [];
-    
-    // 加载模板中的headers
+
     template.headers.forEach(h => {
       headers.push({
         id: Date.now() + Math.random(),
@@ -790,63 +791,61 @@ function loadTemplate(templateId) {
 
     renderHeaders();
     saveToStorage();
-    alert(`模板"${template.name}"已加载！`);
+    alert(i18n('templateLoaded', template.name));
   }
 }
 
-// 删除模板
 function deleteTemplate(templateId) {
   headerTemplates = headerTemplates.filter(t => t.id != templateId);
   saveToStorage();
 }
 
-// 导出Headers到文件（保存到下载文件夹，支持导出为模板）
+// ==================== 导出/导入 ====================
+
 async function exportHeadersToFile() {
   const validHeaders = headers.filter(h => h.key && h.value);
-  
+
   if (validHeaders.length === 0) {
-    alert('没有可导出的Headers');
+    alert(i18n('noExportHeaders'));
     return;
   }
 
-  // 询问是否导出为模板
-  const exportAsTemplate = confirm('是否导出为模板格式？\n点击"确定"导出为模板，点击"取消"仅导出Headers');
-  
+  const exportAsTemplate = confirm(i18n('exportAsTemplatePrompt'));
+
   try {
     let exportData;
     let filename;
-    
+
     if (exportAsTemplate) {
-      // 导出为模板格式
-      const templateName = prompt('请输入模板名称:', `Header模板_${new Date().toLocaleDateString()}`);
+      const defaultName = i18n('defaultTemplateName') + new Date().toLocaleDateString();
+      const templateName = prompt(i18n('enterTemplateName'), defaultName);
       if (!templateName || !templateName.trim()) {
-        return; // 用户取消
+        return;
       }
-      
+
       const template = {
         id: Date.now() + Math.random(),
         name: templateName.trim(),
         headers: validHeaders.map(h => ({ key: h.key, value: h.value })),
         saveTime: Date.now()
       };
-      
+
       exportData = {
         version: '1.0',
         exportTime: new Date().toISOString(),
         template: template,
         headers: validHeaders.map(h => ({ key: h.key, value: h.value }))
       };
-      
+
       const safeName = templateName.replace(/[^a-zA-Z0-9\u4e00-\u9fa5]/g, '_');
       filename = `url-parser-plugin/templates/${safeName}_${template.id}.json`;
     } else {
-      // 仅导出Headers
       exportData = {
         version: '1.0',
         exportTime: new Date().toISOString(),
         headers: validHeaders.map(h => ({ key: h.key, value: h.value }))
       };
-      
+
       const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, -5);
       filename = `headers_${timestamp}.json`;
     }
@@ -855,30 +854,27 @@ async function exportHeadersToFile() {
     const blob = new Blob([jsonStr], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
 
-    // 使用Downloads API下载文件
     await chrome.downloads.download({
       url: url,
       filename: filename,
-      saveAs: false // 直接保存到默认下载文件夹，不弹出对话框
+      saveAs: false
     });
 
-    // 清理URL对象
     setTimeout(() => URL.revokeObjectURL(url), 1000);
 
     if (exportAsTemplate) {
-      // 如果导出为模板，同时保存到浏览器存储
       const template = exportData.template;
       headerTemplates.push(template);
       await saveToStorage();
-      alert(`模板"${template.name}"已导出并保存！`);
+      alert(i18n('templateExportedAndSaved', template.name));
     } else {
-      alert(`Headers已导出到下载文件夹: ${filename}`);
+      alert(i18n('headersExportedTo', filename));
     }
   } catch (error) {
-    console.error('导出失败:', error);
-    alert('导出失败: ' + error.message);
-    
-    // 备用方案：使用a标签下载
+    console.error('Export failed:', error);
+    alert(i18n('exportFailed') + error.message);
+
+    // 备用方案
     try {
       const exportData = {
         version: '1.0',
@@ -895,19 +891,18 @@ async function exportHeadersToFile() {
       a.click();
       document.body.removeChild(a);
       setTimeout(() => URL.revokeObjectURL(url), 100);
-      alert('Headers已导出（备用方案）');
+      alert(i18n('headersExportedFallback'));
     } catch (fallbackError) {
-      alert('导出失败，请检查权限设置');
+      alert(i18n('exportFailedCheckPermissions'));
     }
   }
 }
 
-// 从文件导入Headers
 function importHeadersFromFile() {
   const input = document.createElement('input');
   input.type = 'file';
   input.accept = '.json,application/json';
-  
+
   input.onchange = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -918,34 +913,31 @@ function importHeadersFromFile() {
 
       // 检查是否是模板文件格式
       if (data.template && data.template.headers) {
-        // 这是模板文件，导入为模板
         const template = data.template;
         if (!headerTemplates.find(t => t.id == template.id)) {
           headerTemplates.push(template);
           await saveToStorage();
-          alert(`成功导入模板"${template.name}"！`);
+          alert(i18n('templateImported', template.name));
         } else {
-          alert('该模板已存在');
+          alert(i18n('templateAlreadyExists'));
         }
         return;
       }
 
       // 普通headers文件
       if (!data.headers || !Array.isArray(data.headers)) {
-        alert('文件格式错误：缺少headers字段');
+        alert(i18n('fileFormatError'));
         return;
       }
 
       if (data.headers.length === 0) {
-        alert('文件中没有Headers数据');
+        alert(i18n('noHeadersInFile'));
         return;
       }
 
-      if (confirm(`确定要导入 ${data.headers.length} 个Headers吗？当前Headers将被替换。`)) {
-        // 清空现有headers
+      if (confirm(i18n('confirmImport', String(data.headers.length)))) {
         headers = [];
 
-        // 导入headers
         data.headers.forEach(h => {
           if (h.key && h.value) {
             headers.push({
@@ -958,11 +950,11 @@ function importHeadersFromFile() {
 
         renderHeaders();
         saveToStorage();
-        alert(`成功导入 ${headers.length} 个Headers！`);
+        alert(i18n('importSuccess', String(headers.length)));
       }
     } catch (error) {
-      console.error('导入失败:', error);
-      alert('导入失败: ' + error.message + '\n请确保文件是有效的JSON格式');
+      console.error('Import failed:', error);
+      alert(i18n('importFailed') + error.message + i18n('importFailedTip'));
     }
   };
 
@@ -972,15 +964,13 @@ function importHeadersFromFile() {
 // 从文件系统同步模板
 async function syncTemplatesFromFiles() {
   try {
-    // 提示用户选择模板文件夹或文件
-    alert('请选择下载文件夹中的模板文件进行同步。\n模板文件通常位于：下载文件夹/url-parser-plugin/templates/');
-    
-    // 打开文件选择器，让用户选择模板文件
+    alert(i18n('syncSelectPrompt'));
+
     const input = document.createElement('input');
     input.type = 'file';
     input.accept = '.json,application/json';
-    input.multiple = true; // 允许选择多个文件
-    
+    input.multiple = true;
+
     input.onchange = async (e) => {
       const files = Array.from(e.target.files);
       if (files.length === 0) return;
@@ -996,34 +986,31 @@ async function syncTemplatesFromFiles() {
           if (data.template && data.template.headers) {
             const template = data.template;
             const existingIndex = headerTemplates.findIndex(t => t.id == template.id);
-            
+
             if (existingIndex >= 0) {
-              // 更新现有模板
               headerTemplates[existingIndex] = template;
               updatedCount++;
             } else {
-              // 添加新模板
               headerTemplates.push(template);
               importedCount++;
             }
           }
         } catch (error) {
-          console.warn(`处理文件 ${file.name} 失败:`, error);
+          console.warn(`Failed to process file ${file.name}:`, error);
         }
       }
 
       if (importedCount > 0 || updatedCount > 0) {
         await saveToStorage();
-        alert(`同步完成！\n新增: ${importedCount} 个模板\n更新: ${updatedCount} 个模板`);
+        alert(i18n('syncComplete', String(importedCount), String(updatedCount)));
       } else {
-        alert('没有找到有效的模板文件');
+        alert(i18n('noValidTemplates'));
       }
     };
 
     input.click();
   } catch (error) {
-    console.error('同步模板失败:', error);
-    alert('同步模板失败: ' + error.message);
+    console.error('Sync templates failed:', error);
+    alert(i18n('syncFailed') + error.message);
   }
 }
-

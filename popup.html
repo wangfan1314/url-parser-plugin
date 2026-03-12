@@ -3,55 +3,55 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>URL参数解析器</title>
+  <title data-i18n="appTitle">URL Parameter Parser</title>
   <link rel="stylesheet" href="popup.css">
 </head>
 <body>
   <div class="container">
     <header class="header">
-      <h1>URL参数解析器</h1>
+      <h1 data-i18n="appTitle">URL Parameter Parser</h1>
       <div class="header-actions">
-        <button id="refreshBtn" class="btn btn-secondary" title="刷新URL">🔄</button>
-        <button id="clearBtn" class="btn btn-secondary" title="清空">🗑️</button>
+        <button id="refreshBtn" class="btn btn-secondary" data-i18n-title="refreshUrl" title="Refresh URL">🔄</button>
+        <button id="clearBtn" class="btn btn-secondary" data-i18n-title="clearAll" title="Clear">🗑️</button>
       </div>
     </header>
 
     <div class="url-section">
-      <label for="urlInput">当前URL:</label>
-      <input type="text" id="urlInput" placeholder="输入或粘贴URL" />
-      <button id="parseBtn" class="btn btn-primary">解析</button>
+      <label for="urlInput" data-i18n="currentUrl">Current URL:</label>
+      <input type="text" id="urlInput" data-i18n-placeholder="urlPlaceholder" placeholder="Enter or paste a URL" />
+      <button id="parseBtn" class="btn btn-primary" data-i18n="parseBtn">Parse</button>
     </div>
 
     <div class="search-section">
-      <input type="text" id="searchInput" placeholder="🔍 搜索参数..." />
+      <input type="text" id="searchInput" data-i18n-placeholder="searchPlaceholder" placeholder="🔍 Search parameters..." />
     </div>
 
     <div class="tabs">
-      <button class="tab-btn active" data-tab="params">参数</button>
-      <button class="tab-btn" data-tab="headers">Headers</button>
+      <button class="tab-btn active" data-tab="params" data-i18n="tabParams">Parameters</button>
+      <button class="tab-btn" data-tab="headers" data-i18n="tabHeaders">Headers</button>
     </div>
 
-    <!-- 参数标签页 -->
+    <!-- Parameters Tab -->
     <div id="paramsTab" class="tab-content active">
       <div class="params-list" id="paramsList">
-        <div class="empty-state">请先输入URL并点击解析</div>
+        <div class="empty-state" data-i18n="emptyParams">Enter a URL and click Parse to start</div>
       </div>
       <div class="actions">
-        <button id="addParamBtn" class="btn btn-primary">+ 添加参数</button>
-        <button id="applyParamsBtn" class="btn btn-success">应用参数</button>
+        <button id="addParamBtn" class="btn btn-primary" data-i18n="addParam">+ Add Parameter</button>
+        <button id="applyParamsBtn" class="btn btn-success" data-i18n="applyParams">Apply Parameters</button>
       </div>
     </div>
 
-    <!-- Headers标签页 -->
+    <!-- Headers Tab -->
     <div id="headersTab" class="tab-content">
       <div class="headers-list" id="headersList">
-        <div class="empty-state">暂无Headers</div>
+        <div class="empty-state" data-i18n="emptyHeaders">No Headers yet</div>
       </div>
       <div class="actions">
-        <button id="addHeaderBtn" class="btn btn-primary">+ 添加Header</button>
-        <button id="exportHeadersBtn" class="btn btn-secondary">📥 导出文件</button>
-        <button id="importHeadersBtn" class="btn btn-secondary">📤 导入文件</button>
-        <button id="applyHeadersBtn" class="btn btn-success">应用Headers</button>
+        <button id="addHeaderBtn" class="btn btn-primary" data-i18n="addHeader">+ Add Header</button>
+        <button id="exportHeadersBtn" class="btn btn-secondary" data-i18n="exportFile">📥 Export</button>
+        <button id="importHeadersBtn" class="btn btn-secondary" data-i18n="importFile">📤 Import</button>
+        <button id="applyHeadersBtn" class="btn btn-success" data-i18n="applyHeaders">Apply Headers</button>
       </div>
     </div>
   </div>
@@ -59,4 +59,3 @@
   <script src="popup.js"></script>
 </body>
 </html>
-

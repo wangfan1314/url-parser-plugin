@@ -1,8 +1,9 @@
 {
   "manifest_version": 3,
-  "name": "URL参数解析器",
+  "name": "__MSG_extName__",
   "version": "1.0.0",
-  "description": "快速解析URL参数，支持编辑、搜索、拖拽排序和Header注入",
+  "description": "__MSG_extDescription__",
+  "default_locale": "en",
   "permissions": [
     "activeTab",
     "storage",

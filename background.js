@@ -169,7 +169,7 @@ async function injectHeadersWithDeclarativeNetRequest(headers, tabId) {
     // 获取当前标签页信息
     const tab = await chrome.tabs.get(tabId);
     if (!tab || !tab.url) {
-      throw new Error('无法获取标签页信息');
+      throw new Error('Cannot get tab info');
     }
 
     const url = new URL(tab.url);

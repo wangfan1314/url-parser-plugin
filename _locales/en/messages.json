@@ -1,0 +1,329 @@
+{
+  "extName": {
+    "message": "URL Parameter Parser",
+    "description": "Extension name"
+  },
+  "extDescription": {
+    "message": "Quickly parse URL parameters with editing, search, drag-and-drop sorting and header injection",
+    "description": "Extension description"
+  },
+  "appTitle": {
+    "message": "URL Parameter Parser",
+    "description": "App title in popup header"
+  },
+  "refreshUrl": {
+    "message": "Refresh URL",
+    "description": "Refresh button title"
+  },
+  "clearAll": {
+    "message": "Clear",
+    "description": "Clear button title"
+  },
+  "currentUrl": {
+    "message": "Current URL:",
+    "description": "Label for URL input"
+  },
+  "urlPlaceholder": {
+    "message": "Enter or paste a URL",
+    "description": "Placeholder for URL input"
+  },
+  "parseBtn": {
+    "message": "Parse",
+    "description": "Parse button text"
+  },
+  "searchPlaceholder": {
+    "message": "🔍 Search parameters...",
+    "description": "Placeholder for search input"
+  },
+  "tabParams": {
+    "message": "Parameters",
+    "description": "Parameters tab label"
+  },
+  "tabHeaders": {
+    "message": "Headers",
+    "description": "Headers tab label"
+  },
+  "emptyParams": {
+    "message": "Enter a URL and click Parse to start",
+    "description": "Empty state for parameters list"
+  },
+  "addParam": {
+    "message": "+ Add Parameter",
+    "description": "Add parameter button"
+  },
+  "applyParams": {
+    "message": "Apply Parameters",
+    "description": "Apply parameters button"
+  },
+  "emptyHeaders": {
+    "message": "No Headers yet",
+    "description": "Empty state for headers list"
+  },
+  "addHeader": {
+    "message": "+ Add Header",
+    "description": "Add header button"
+  },
+  "exportFile": {
+    "message": "📥 Export",
+    "description": "Export headers button"
+  },
+  "importFile": {
+    "message": "📤 Import",
+    "description": "Import headers button"
+  },
+  "applyHeaders": {
+    "message": "Apply Headers",
+    "description": "Apply headers button"
+  },
+  "paramNamePlaceholder": {
+    "message": "Parameter name",
+    "description": "Placeholder for parameter name input"
+  },
+  "paramValuePlaceholder": {
+    "message": "Parameter value",
+    "description": "Placeholder for parameter value input"
+  },
+  "headerNamePlaceholder": {
+    "message": "Header name",
+    "description": "Placeholder for header name input"
+  },
+  "headerValuePlaceholder": {
+    "message": "Header value",
+    "description": "Placeholder for header value input"
+  },
+  "deleteBtn": {
+    "message": "Delete",
+    "description": "Delete button text"
+  },
+  "unpinParam": {
+    "message": "Unpin",
+    "description": "Unpin parameter tooltip"
+  },
+  "pinToTop": {
+    "message": "Pin to top",
+    "description": "Pin parameter tooltip"
+  },
+  "noMatchingParams": {
+    "message": "No matching parameters found",
+    "description": "Empty state when search finds nothing"
+  },
+  "urlFormatError": {
+    "message": "Invalid URL format. Please check your URL.",
+    "description": "Alert for invalid URL"
+  },
+  "addValidHeader": {
+    "message": "Please add at least one valid Header",
+    "description": "Alert when no valid headers exist"
+  },
+  "cannotGetTab": {
+    "message": "Cannot get current tab",
+    "description": "Alert when tab is inaccessible"
+  },
+  "headersApplied": {
+    "message": "Headers applied! Please refresh the page to see the effect.",
+    "description": "Alert after successful header injection"
+  },
+  "applyHeadersFailed": {
+    "message": "Failed to apply Headers: ",
+    "description": "Prefix for header apply failure alert"
+  },
+  "unknownError": {
+    "message": "Unknown error",
+    "description": "Unknown error text"
+  },
+  "applyParamsFailed": {
+    "message": "Failed to apply parameters: ",
+    "description": "Prefix for param apply failure alert"
+  },
+  "noExportHeaders": {
+    "message": "No Headers to export",
+    "description": "Alert when no headers to export"
+  },
+  "exportAsTemplatePrompt": {
+    "message": "Export as template format?\nClick OK for template, Cancel for headers only",
+    "description": "Confirm dialog for export format"
+  },
+  "enterTemplateName": {
+    "message": "Enter template name:",
+    "description": "Prompt for template name"
+  },
+  "defaultTemplateName": {
+    "message": "Header Template_",
+    "description": "Default prefix for template name"
+  },
+  "templateExportedAndSaved": {
+    "message": "Template \"$NAME$\" exported and saved!",
+    "description": "Alert after template export",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "My Template"
+      }
+    }
+  },
+  "headersExportedTo": {
+    "message": "Headers exported to download folder: $FILENAME$",
+    "description": "Alert after headers export",
+    "placeholders": {
+      "filename": {
+        "content": "$1",
+        "example": "headers_2024-01-01.json"
+      }
+    }
+  },
+  "exportFailed": {
+    "message": "Export failed: ",
+    "description": "Prefix for export failure"
+  },
+  "headersExportedFallback": {
+    "message": "Headers exported (fallback method)",
+    "description": "Alert for fallback export"
+  },
+  "exportFailedCheckPermissions": {
+    "message": "Export failed. Please check permissions.",
+    "description": "Alert for export permission error"
+  },
+  "templateAlreadyExists": {
+    "message": "This template already exists",
+    "description": "Alert when template already exists"
+  },
+  "templateImported": {
+    "message": "Successfully imported template \"$NAME$\"!",
+    "description": "Alert after template import",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "My Template"
+      }
+    }
+  },
+  "fileFormatError": {
+    "message": "File format error: missing headers field",
+    "description": "Alert for invalid file format"
+  },
+  "noHeadersInFile": {
+    "message": "No Headers data in file",
+    "description": "Alert when file has no headers"
+  },
+  "confirmImport": {
+    "message": "Import $COUNT$ Headers? Current Headers will be replaced.",
+    "description": "Confirm dialog for import",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "importSuccess": {
+    "message": "Successfully imported $COUNT$ Headers!",
+    "description": "Alert after successful import",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "importFailed": {
+    "message": "Import failed: ",
+    "description": "Prefix for import failure"
+  },
+  "importFailedTip": {
+    "message": "\nPlease make sure the file is valid JSON format",
+    "description": "Tip appended to import failure message"
+  },
+  "syncSelectPrompt": {
+    "message": "Please select template files from your download folder.\nTemplates are usually at: Downloads/url-parser-plugin/templates/",
+    "description": "Sync templates prompt"
+  },
+  "syncComplete": {
+    "message": "Sync complete!\nNew: $NEW$ templates\nUpdated: $UPDATED$ templates",
+    "description": "Sync result",
+    "placeholders": {
+      "new": {
+        "content": "$1",
+        "example": "2"
+      },
+      "updated": {
+        "content": "$2",
+        "example": "1"
+      }
+    }
+  },
+  "noValidTemplates": {
+    "message": "No valid template files found",
+    "description": "Alert when sync finds no templates"
+  },
+  "templateNoExist": {
+    "message": "Template does not exist or is corrupted",
+    "description": "Alert for invalid template"
+  },
+  "confirmLoadTemplate": {
+    "message": "Load template \"$NAME$\"? Current Headers will be replaced.",
+    "description": "Confirm load template",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "My Template"
+      }
+    }
+  },
+  "templateLoaded": {
+    "message": "Template \"$NAME$\" loaded!",
+    "description": "Alert after template load",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "My Template"
+      }
+    }
+  },
+  "confirmDeleteTemplate": {
+    "message": "Delete template \"$NAME$\"?",
+    "description": "Confirm delete template",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "My Template"
+      }
+    }
+  },
+  "addValidHeaderFirst": {
+    "message": "Please add at least one valid Header first",
+    "description": "Alert when trying to save empty template"
+  },
+  "templateSaved": {
+    "message": "Template \"$NAME$\" saved!",
+    "description": "Alert after template save",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "My Template"
+      }
+    }
+  },
+  "headerCount": {
+    "message": "$COUNT$ Headers",
+    "description": "Header count in template",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
+  },
+  "loadBtn": {
+    "message": "Load",
+    "description": "Load template button"
+  },
+  "noSavedTemplates": {
+    "message": "No saved templates",
+    "description": "Empty state for templates list"
+  },
+  "syncFailed": {
+    "message": "Sync templates failed: ",
+    "description": "Prefix for sync failure"
+  }
+}
+
